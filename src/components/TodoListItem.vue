@@ -1,10 +1,20 @@
 <template>
   <li>
-    <label :for="todo.id" @change="handleCheck(todo.id)">
-      <input type="checkbox" :id="todo.id" :checked="todo.done"/>
-      <span>{{todo.title}}</span>
+    <label>
+      <input type="checkbox" :checked="todo.done" @change="handleCheck(todo.id)" />
+      <span v-show="!todo.isEdit">{{todo.title}}</span>
+      <input 
+				type="text" 
+        class="inputTitle"
+				v-show="todo.isEdit" 
+				:value="todo.title" 
+				@blur="handleBlur(todo,$event)"
+        @keyup.enter="handleBlur(todo,$event)"
+				ref="inputTitle"
+			>
     </label>
     <button class="btn btn-danger" @click="handleDelete(todo.id)">删除</button>
+    <button v-show="!todo.isEdit" class="btn btn-edit" @click="handleUpdate(todo)">编辑</button>
   </li>
 </template>
 
@@ -26,6 +36,21 @@ export default {
         // this.deleteTodo(id)
         this.$bus.$emit('deleteTodo', id)
       }
+    },
+    handleUpdate(todo){
+      if (todo.hasOwnProperty('isEdit')) {
+        todo.isEdit = true
+      } else {
+        this.$set(todo, 'isEdit', true)
+      }
+      this.$nextTick(()=>{
+        this.$refs.inputTitle.focus()
+      })
+    },
+    handleBlur(todo,e) {
+      todo.isEdit = false
+      if (!e.target.value.trim())  return alert('输入不能为空')
+      this.$bus.$emit('updateTodo', todo.id, e.target.value)
     }
   }
 };
@@ -43,16 +68,19 @@ li {
 }
 
 li label {
-  width: 500px;
   float: left;
   cursor: pointer;
 }
 
-li label li input {
+li label input {
   vertical-align: middle;
-  margin-right: 6px;
+  margin-right: 10px;
   position: relative;
   top: -1px;
+}
+
+.inputTitle {
+  outline: none;
 }
 
 li button {

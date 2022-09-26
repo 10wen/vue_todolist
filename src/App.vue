@@ -43,6 +43,12 @@ export default {
     deleteTodo(id){
       this.todos = this.todos.filter(item => item.id !== id)
     },
+    // 编辑todo
+    updateTodo(id, title){
+      this.todos.forEach(item => {
+        if (id === item.id) item.title = title;
+      })
+    },
     //全选or取消全选
     checkAllTodo(done){
       this.todos.forEach(item => {
@@ -65,10 +71,12 @@ export default {
   mounted(){
     this.$bus.$on('checkTodo', this.checkTodo)
     this.$bus.$on('deleteTodo', this.deleteTodo)
+    this.$bus.$on('updateTodo', this.updateTodo)
   },
   beforeDestroy(){
     this.$bus.off('checkTodo')
     this.$bus.off('deleteTodo')
+    this.$bus.off('updateTodo')
   },
   components: {
     TodoListHeader,
@@ -106,6 +114,12 @@ ul {
   color: #fff;
   background-color: #da4f49;
   border: 1px solid #bd362f;
+}
+.btn-edit {
+  color: #fff;
+  background-color: skyblue;
+  border: 1px solid skyblue;
+  margin-right: 5px;
 }
 .btn-danger:hover {
   color: #fff;
