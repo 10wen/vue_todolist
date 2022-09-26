@@ -5,11 +5,7 @@
         <!-- <TodoListHeader :addTodo="addTodo"></TodoListHeader> -->
         <!-- 给子组件绑定自定义事件 -->
         <TodoListHeader @addTodo="addTodo"></TodoListHeader>
-        <TodoListBody 
-          :todos="todos"
-          :checkTodo="checkTodo"
-          :deleteTodo="deleteTodo"
-        ></TodoListBody>
+        <TodoListBody :todos="todos"></TodoListBody>
         <TodoListFooter 
           :todos="todos"
           @checkAllTodo="checkAllTodo" 
@@ -65,6 +61,14 @@ export default {
         localStorage.setItem('todos', JSON.stringify(newVal))
       }
     }
+  },
+  mounted(){
+    this.$bus.$on('checkTodo', this.checkTodo)
+    this.$bus.$on('deleteTodo', this.deleteTodo)
+  },
+  beforeDestroy(){
+    this.$bus.off('checkTodo')
+    this.$bus.off('deleteTodo')
   },
   components: {
     TodoListHeader,
