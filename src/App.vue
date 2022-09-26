@@ -2,7 +2,9 @@
   <div id="root">
     <div class="todo-container">
       <div class="todo-wrap">
-        <TodoListHeader :addTodo="addTodo"></TodoListHeader>
+        <!-- <TodoListHeader :addTodo="addTodo"></TodoListHeader> -->
+        <!-- 给子组件绑定自定义事件 -->
+        <TodoListHeader @addTodo="addTodo"></TodoListHeader>
         <TodoListBody 
           :todos="todos"
           :checkTodo="checkTodo"
@@ -10,8 +12,8 @@
         ></TodoListBody>
         <TodoListFooter 
           :todos="todos"
-          :checkAllTodo="checkAllTodo" 
-          :clearAllTodo="clearAllTodo"
+          @checkAllTodo="checkAllTodo" 
+          @clearAllTodo="clearAllTodo"
         ></TodoListFooter>
       </div>
     </div>

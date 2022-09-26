@@ -9,7 +9,7 @@ import {nanoid} from 'nanoid';
 
 export default {
   name: 'TodoListHeader',
-  props: ['addTodo'],
+  // props: ['addTodo'],
   data(){
     return {
       title: ''
@@ -20,7 +20,8 @@ export default {
       //校验数据
 			if(!this.title.trim()) return alert('输入不能为空')
       let item = {id:nanoid(), title: this.title, done: false};
-      this.addTodo(item)
+      // this.addTodo(item)
+      this.$emit('addTodo', item)
       this.title = ''
     }
   },
